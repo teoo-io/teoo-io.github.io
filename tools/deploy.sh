@@ -130,7 +130,8 @@ main() {
   backup
   flush
   deploy
-  ls
+  docker build --tag  ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.APP_NAME }}:latest .
+  docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.APP_NAME }}
 }
 
 while (($#)); do
