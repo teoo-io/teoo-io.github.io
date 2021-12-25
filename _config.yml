@@ -74,10 +74,10 @@ theme_mode:   dark
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn: https://github.com/blacksheep-git/blacksheep-git.github.io/tree/main/assets/img/favicon
+img_cdn: https://cdn.jsdelivr.net/gh/blacksheep-git/blacksheep-git.github.io@tree/main/images
 
 # the avatar on sidebar, support local or CORS resources
-avatar: https://github.com/blacksheep-git/blacksheep-git.github.io/tree/main/assets/img/favicon
+avatar: https://cdn.jsdelivr.net/gh/blacksheep-git/blacksheep-git.github.io@tree/main/assets/img/favicon
 
 # boolean type, the global switch for ToC in posts.
 toc: true
