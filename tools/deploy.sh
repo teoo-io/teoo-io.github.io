@@ -129,6 +129,9 @@ main() {
   backup
   flush
   deploy
+
+  docker build --tag  DOCKERHUB_USERNAME/APP_NAME:latest .
+  docker push DOCKERHUB_USERNAME/APP_NAME
 }
 
 while (($#)); do
