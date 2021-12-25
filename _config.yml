@@ -26,7 +26,7 @@ description: >-                        # used by seo meta and the atom feed
   Guides on self hosted K3s, Kubernetes, and DevOps in general.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: 'https://docs.teoo.io'
+url: ' '
 
 github:
   username: blacksheep-git             # change to your github username
