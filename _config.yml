@@ -77,7 +77,7 @@ theme_mode:   dark
 img_cdn: https://cdn.jsdelivr.net/gh/blacksheep-git/blacksheep-git.github.io@tree/main/images/
 
 # the avatar on sidebar, support local or CORS resources
-avatar: https://cdn.jsdelivr.net/gh/blacksheep-git/blacksheep-git.github.io@tree/main/assets/img/favicon/
+avatar: https://cdn.jsdelivr.net/gh/blacksheep-git/blacksheep-git.github.io@tree/main/assets/img/favicon/android-chrome-192x192.png
 
 # boolean type, the global switch for ToC in posts.
 toc: true
