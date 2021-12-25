@@ -1,0 +1,1 @@
+[![Automatic build](https://github.com/blacksheep-git/blacksheep-git.github.io/actions/workflows/pages-deploy.yml/badge.svg)](https://github.com/blacksheep-git/blacksheep-git.github.io/actions/workflows/pages-deploy.yml)
