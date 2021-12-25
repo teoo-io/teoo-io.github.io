@@ -108,7 +108,6 @@ deploy() {
   git add -A
   git commit -m "[Automation] Site update No.${GITHUB_RUN_NUMBER}"
 
-
   if $_no_pages_branch; then
     git push -u origin "$PAGES_BRANCH"
   else
@@ -130,8 +129,6 @@ main() {
   backup
   flush
   deploy
-  docker build --tag  DOCKERHUB_USERNAME/APP_NAME:latest .
-  docker push DOCKERHUB_USERNAME/APP_NAME
 }
 
 while (($#)); do
