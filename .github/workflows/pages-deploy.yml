@@ -40,7 +40,9 @@ jobs:
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
       - name: Deploy GitHub + K3s
-        run: bash tools/deploy.sh
+        run: |
+        sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' tools/deploy.sh
+        bash tools/deploy.sh
 
       # Deploys to K3s
       - name: Deploy to K3s
