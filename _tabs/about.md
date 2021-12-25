@@ -1,6 +1,6 @@
 ---
 title: About
-icon: fas fa-info-circle
+icon: fas info-circle
 order: 4
 ---
 
