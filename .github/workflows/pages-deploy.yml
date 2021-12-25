@@ -31,6 +31,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       # Set Kubernetes context
       - name: Kubernetes Set Context
         uses: Azure/k8s-set-context@v2
@@ -41,8 +42,8 @@ jobs:
 
       - name: Deploy GitHub + K3s
         run: |
-        sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' tools/deploy.sh
-        bash tools/deploy.sh
+          sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' tools/deploy.sh
+          bash tools/deploy.sh
 
       # Deploys to K3s
       - name: Deploy to K3s
