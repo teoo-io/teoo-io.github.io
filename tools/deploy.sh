@@ -127,7 +127,7 @@ main() {
 
   setup_gh
   backup
-  #flush
+  flush
   deploy
 }
 
