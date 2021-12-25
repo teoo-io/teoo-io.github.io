@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
         - name: APP_NAME
-          image: DOCKERHUB_USERNAME/APP_NAME:latest
+          image: DOCKERHUB_USERNAME/APP_NAME:GIT_HASH
           ports:
             - name: APP_NAME-svc
               containerPort: 80
