@@ -20,7 +20,7 @@ timezone: America/Boise
 
 title: Teo's Docs                          # the main title
 
-tagline: A collection of guides and documentation   # it will display as the sub-title
+tagline: A collection of self-hosting guides and documentation.   # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
   Guides on self hosted K3s, Kubernetes, and DevOps in general.
@@ -74,7 +74,7 @@ theme_mode:   dark
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn:
+img_cdn: https://github.com/blacksheep-git/blacksheep-git.github.io/tree/main/assets/img/favicon
 
 # the avatar on sidebar, support local or CORS resources
 avatar:
