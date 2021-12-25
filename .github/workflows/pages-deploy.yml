@@ -57,7 +57,7 @@ jobs:
       - name: Build Docker Image
         # kubectl apply -f issuer-config.yml
         run: |
-          docker build --tag  ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.APP_NAME }}:${GITHUB_SHA} .
+          docker build --tag  ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.APP_NAME }}:${{GITHUB_SHA}} .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.APP_NAME }}
 
       # Deploys to K3s
