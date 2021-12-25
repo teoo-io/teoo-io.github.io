@@ -27,8 +27,8 @@ jobs:
 
       - name: Deploy GitHub + K3s
         run: |
-          sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' tools/deploy.sh
           bash tools/deploy.sh
+
   deploy-to-k3s:
     needs: continuous-delivery
     runs-on: ubuntu-latest
