@@ -5,4 +5,4 @@ order: 4
 ---
 
 
-> **Note**: Add Markdown syntax content to file `_tabs/about.md` and it will show up on this page.
+> **Quick Note**: This site is under construction, but the intention is to have this site host a collection of guides and code samples - mostly about sel-hosting services.
