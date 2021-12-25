@@ -20,7 +20,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
+
       # Log in to Docker
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -44,5 +44,7 @@ jobs:
       - name: Deploy to K3s
         # kubectl apply -f issuer-config.yml
         run: |
-          sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_URL/${{ secrets.APP_URL }}/g' site-config.yml
+          sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' site-config.yml
+          sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' site-ingress-config.yml
           kubectl apply -f site-config.yml
+          kubectl apply -f site-ingress-config.yml

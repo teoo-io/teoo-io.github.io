@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: APP_NAME-svc
+  namespace: APP_NAME-system
+spec:
+  ports:
+    - protocol: TCP
+      name: APP_NAME-svc
+      port: 80
+  selector:
+    app: APP_NAME
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: APP_NAME
+  namespace: APP_NAME-system
+  labels:
+    app: APP_NAME
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: APP_NAME
+  template:
+    metadata:
+      labels:
+        app: APP_NAME
+    spec:
+      containers:
+        - name: APP_NAME
+          image: DOCKERHUB_USERNAME/APP_NAME:latest
+          ports:
+            - name: APP_NAME-svc
+              containerPort: 80
