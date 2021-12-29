@@ -30,6 +30,7 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.APP_NAME }}:${{GITHUB.SHA}}
   
   deploy-to-k3s:
+    needs: build-docker-image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
