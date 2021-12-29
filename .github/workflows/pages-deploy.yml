@@ -23,7 +23,7 @@ jobs:
           ruby-version: 2.7
           bundler-cache: true
 
-      - name: Deploy GitHub + K3s
+      - name: Build site + Push to gh-pages branch
         run: |
           bash tools/deploy.sh
   
