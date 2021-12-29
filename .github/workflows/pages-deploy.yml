@@ -9,11 +9,32 @@ on:
       - LICENSE
 
 jobs:
-  build-docker-image:
+  build-site:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # for posts's lastmod
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+          bundler-cache: true
+
+      - name: Deploy GitHub + K3s
+        run: |
+          bash tools/deploy.sh
+  
+  build-docker-image:
+    needs:  build-site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: 'gh-pages'  # Built file are in gh-pages branch
 
       # Log in to Docker
       - name: Login to Docker Hub
