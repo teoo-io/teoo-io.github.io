@@ -1,17 +1,4 @@
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: APP_NAME-svc
-  namespace: APP_NAME-system
-spec:
-  ports:
-    - protocol: TCP
-      name: APP_NAME-svc
-      port: 80
-  selector:
-    app: APP_NAME
----
 kind: Deployment
 apiVersion: apps/v1
 metadata:
