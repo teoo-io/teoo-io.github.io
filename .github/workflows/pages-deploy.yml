@@ -66,5 +66,5 @@ jobs:
           sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' -e 's/GIT_HASH/${{GITHUB.SHA}}/g' site-config.yml
           kubectl apply -f site-config.yml
 
-          sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' site-ingress-config.yml
-          kubectl apply -f site-ingress-config.yml
+          # sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' site-ingress-config.yml
+          # kubectl apply -f site-ingress-config.yml
