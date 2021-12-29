@@ -46,14 +46,13 @@ jobs:
 
       # Deploys to K3s
       - name: Deploy to K3s
-        # kubectl apply -f issuer-config.yml
         run: |
           # kubectl create ns ${{ secrets.APP_NAME }}-system
           
           sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' -e 's/GIT_HASH/${{GITHUB.SHA}}/g' deployment.yml
           kubectl apply -f deployment.yml
           
-          sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' -e 's/GIT_HASH/${{GITHUB.SHA}}/g' service.yml
+          sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' service.yml
           kubectl apply -f service.yml
 
          # sed -i'' -e 's/DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g' -e 's/APP_NAME/${{ secrets.APP_NAME }}/g' ingress.yml
