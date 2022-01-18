@@ -1,0 +1,401 @@
+<!DOCTYPE html><html lang="en" mode="dark" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="day-prompt" content="days ago"><meta name="hour-prompt" content="hours ago"><meta name="minute-prompt" content="minutes ago"><meta name="justnow-prompt" content="just now"><meta name="generator" content="Jekyll v4.2.1" /><meta property="og:title" content="OpenStack Deployment - Charms" /><meta property="og:locale" content="en" /><meta name="description" content="We will be using JuJu to orchestrate the OpenStack deployment one individual “charm” container at a time. OpenStack can also be deployed via “bundles” - for instructions on a bundle deployment follow the official guide on the OpenStack website." /><meta property="og:description" content="We will be using JuJu to orchestrate the OpenStack deployment one individual “charm” container at a time. OpenStack can also be deployed via “bundles” - for instructions on a bundle deployment follow the official guide on the OpenStack website." /><link rel="canonical" href="/posts/openstack-deployment-charms/" /><meta property="og:url" content="/posts/openstack-deployment-charms/" /><meta property="og:site_name" content="Teo’s Docs" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-01-25T07:00:00-07:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="OpenStack Deployment - Charms" /><meta name="twitter:site" content="@twitter" /><meta name="google-site-verification" content="google_meta_tag_verification" /> <script type="application/ld+json"> {"description":"We will be using JuJu to orchestrate the OpenStack deployment one individual “charm” container at a time. OpenStack can also be deployed via “bundles” - for instructions on a bundle deployment follow the official guide on the OpenStack website.","url":"/posts/openstack-deployment-charms/","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/openstack-deployment-charms/"},"headline":"OpenStack Deployment - Charms","dateModified":"2021-01-25T07:00:00-07:00","datePublished":"2021-01-25T07:00:00-07:00","@context":"https://schema.org"}</script><title>OpenStack Deployment - Charms | Teo's Docs</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Teo's Docs"><meta name="application-name" content="Teo's Docs"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://fonts.gstatic.com"><link rel="preconnect" href="https://www.google-analytics.com" crossorigin="use-credentials"><link rel="dns-prefetch" href="https://www.google-analytics.com"><link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://cdn.jsdelivr.net"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script><body data-spy="scroll" data-target="#toc"><div id="sidebar" class="d-flex flex-column align-items-end" lang="en"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="https://cdn.jsdelivr.net/gh/blacksheep-git/blacksheep-git.github.io@tree/main/assets/img/favicon/android-chrome-192x192.png" alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title mt-3"> <a href="/">Teo's Docs</a></div><div class="site-subtitle font-italic">A collection of self-hosting guides and documentation.</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <a href="https://github.com/blacksheep-git" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['m','teoo.io'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper" class="row justify-content-center topbar-down"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>OpenStack Deployment - Charms</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> <i class="fa fa-times-circle fa-fw" id="search-cleaner"></i> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper"><div id="main"><div class="row"><div id="post-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>OpenStack Deployment - Charms</h1><div class="post-meta text-muted d-flex flex-column"><div> <span class="semi-bold"> Mateo Ortegon </span> on <span class="timeago " data-toggle="tooltip" data-placement="bottom" title="Mon, Jan 25, 2021, 7:00 AM -0700" >Jan 25, 2021<i class="unloaded">2021-01-25T07:00:00-07:00</i> </span></div><div> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1939 words">10 min read</span></div></div><div class="post-content"><p>We will be using JuJu to orchestrate the OpenStack deployment one individual “charm” container at a time. OpenStack can also be deployed via “bundles” - for instructions on a bundle deployment follow the official guide on the OpenStack website.</p><blockquote><p>“There are many moving parts involved in a charmed OpenStack install. During much of the process there will be components that have not yet been satisfied, which will cause error-like messages to be displayed in the output of the juju status command. Do not be alarmed. Indeed, these are opportunities to learn about the interdependencies of the various pieces of software. Messages such as Missing relation and blocked will vanish once the appropriate applications and relations have been added and processed.”</p></blockquote><h1 id="installation">Installation</h1><p>First, make sure you are interacting with the correct juju controller and model.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju switch juju-controller:openstack
+</pre></table></code></div></div><p>With that out of the way, it may be useful to monitor the deployment progress either through the JuJu dashboard or using the JuJu status command.</p><h3 id="monitoring-the-openstack-deployment">Monitoring the OpenStack Deployment</h3><p>To access the JuJu dashboard, enter the following command.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju dashboard
+</pre></table></code></div></div><p>The output will look something like this.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre><td class="rouge-code"><pre>juju dashboard
+  Dashboard 0.6.2 <span class="k">for </span>controller <span class="s2">"juju-controller"</span> is enabled at:
+  https://192.168.1.240:17070/dashboard
+  Your login credential is:
+  username: admin
+  password: 536d568fb04609daee40c61abc36844d
+</pre></table></code></div></div><p>Alternatively, to monitor JuJu status use this command.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>watch <span class="nt">-n</span> 1 <span class="nt">-c</span> juju status <span class="nt">--color</span>
+</pre></table></code></div></div><h2 id="ceph-osd">Ceph-OSD</h2><p>The first charm we will deploy is the Ceph-osd charm or “object storage device”. This is done by first creating a YAML file called <strong>ceph-osd.yaml</strong> which specifies the charm’s configurations, where “<strong>/dev/sdb</strong>” is the path to the <code class="language-plaintext highlighter-rouge">sdb</code>drive.</p><div class="language-yaml highlighter-rouge"><div class="code-header"> <span text-data=" YAML "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="na">ceph-osd</span><span class="pi">:</span>
+  <span class="na">osd-devices</span><span class="pi">:</span> <span class="s">/dev/sdb</span>
+  <span class="na">source</span><span class="pi">:</span> <span class="s">cloud:focal-wallaby</span>
+</pre></table></code></div></div><p>Next, we will deploy the Ceph-osd charm to 4 nodes. Since we only have compute nodes, the “compute” tag constraint is not necessary strictly speaking, but it is good practice for future deployments.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">-n</span> 4 <span class="nt">--config</span> ceph-osd.yaml <span class="nt">--constraints</span> <span class="nv">tags</span><span class="o">=</span>compute ceph-osd
+</pre></table></code></div></div><p>With this being the first charm deployed to the compute nodes, MAAS will first power on the servers and deploy Ubuntu 20.04 to each node - and once that is done, JuJu will proceed to install the charm software. You can monitor the progress using the JuJu status command output - it will look like this once the Ceph-osd charm is finished installing.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre><td class="rouge-code"><pre>Model      Controller       Cloud/Region  Version  SLA          Timestamp
+openstack  juju-controller  maas-cloud    2.8.10   unsupported  05:09:54Z
+
+App       Version  Status   Scale  Charm     Store       Rev  OS      Notes
+ceph-osd  16.2.0   blocked      4  ceph-osd  jujucharms  310  ubuntu
+
+Unit         Workload  Agent  Machine  Public address  Ports  Message
+ceph-osd/0  blocked  idle  0  192.168.1.241  Missing relation: monitor
+ceph-osd/1<span class="k">*</span> blocked  idle  1  192.168.1.235  Missing relation: monitor
+ceph-osd/2  blocked  idle  2  192.168.1.236  Missing relation: monitor
+ceph-osd/3  blocked  idle  3  192.168.1.237  Missing relation: monitor
+
+Machine  State    DNS            Inst <span class="nb">id  </span>Series  AZ       Message
+0        started  192.168.1.241  node0  focal   default  Deployed
+1        started  192.168.1.235  node1  focal   default  Deployed
+2        started  192.168.1.236  node2  focal   default  Deployed
+3        started  192.168.1.237  node3  focal   default  Deployed
+</pre></table></code></div></div><h2 id="nova-compute">Nova Compute</h2><p>With the Ceph-osd installed, the Nova Compute charm is next on the list of deployment. The process is very similar across charms. First, create the file <strong>nova-compute.yaml</strong>.</p><div class="language-yaml highlighter-rouge"><div class="code-header"> <span text-data=" YAML "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre><td class="rouge-code"><pre><span class="na">nova-compute</span><span class="pi">:</span>
+  <span class="na">config-flags</span><span class="pi">:</span> <span class="s">default_ephemeral_format=ext4</span>
+  <span class="na">enable-live-migration</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">enable-resize</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">migration-auth-type</span><span class="pi">:</span> <span class="s">ssh</span>
+  <span class="na">openstack-origin</span><span class="pi">:</span> <span class="s">cloud:focal-wallaby</span>
+</pre></table></code></div></div><p>Then, deploy the Nova Compute charm using the file <strong>nova-compute.yaml</strong> configurations.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">-n</span> 3 <span class="nt">--to</span> 1,2,3 <span class="nt">--config</span> nova-compute.yaml nova-compute
+</pre></table></code></div></div><h2 id="mysql-innodb-cluster">MySQL InnoDB Cluster</h2><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">-n</span> 3 <span class="nt">--to</span> lxd:0,lxd:1,lxd:2 mysql-innodb-cluster
+</pre></table></code></div></div><h2 id="vault">Vault</h2><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">--to</span> lxd:3 vault
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>juju deploy mysql-router vault-mysql-router
+juju add-relation vault-mysql-router:db-router mysql-innodb-cluster:db-router
+juju add-relation vault-mysql-router:shared-db vault:shared-db
+</pre></table></code></div></div><h3 id="unseal-vault">Unseal Vault</h3><p>To unseal the Vault container, first install the vault agent application on the MAAS Controller.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="nb">sudo </span>snap <span class="nb">install </span>vault
+</pre></table></code></div></div><p>With the Vault application installed, run <code class="language-plaintext highlighter-rouge">juju status</code> to obtain the IP of the vault container.</p><blockquote><p><strong>Hint:</strong> The port specified on <code class="language-plaintext highlighter-rouge">juju status</code> for this IP is 8200. This step is to tell the Vault application where to reach the Vault container.</p></blockquote><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="nb">export </span><span class="nv">VAULT_ADDR</span><span class="o">=</span><span class="s2">"http://10.0.0.126:8200"</span>
+</pre></table></code></div></div><p>Now ask the vault for 5 keys.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>vault operator init <span class="nt">-key-shares</span><span class="o">=</span>5 <span class="nt">-key-threshold</span><span class="o">=</span>3
+</pre></table></code></div></div><p>Sample output:</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre><td class="rouge-code"><pre>Unseal Key 1: XONSc5Ku8HJu+ix/zbzWhMvDTiPpwWX0W1X/e/J1Xixv
+Unseal Key 2: J/fQCPvDeMFJT3WprfPy17gwvyPxcvf+GV751fTHUoN/
+Unseal Key 3: +bRfX5HMISegsODqNZxvNcupQp/kYQuhsQ2XA+GamjY4
+Unseal Key 4: FMRTPJwzykgXFQOl2XTupw2lfgLOXbbIep9wgi9jQ2ls
+Unseal Key 5: 7rrxiIVQQWbDTJPMsqrZDKftD6JxJi6vFOlyC0KSabDB
+
+Initial Root Token: s.ezlJjFw8ZDZO6KbkAkm605Qv
+
+Vault initialized with 5 key shares and a key threshold of 3. Please securely
+distribute the key shares printed above. When the Vault is re-sealed,
+restarted, or stopped, you must supply at least 3 of these keys to unseal it
+before it can start servicing requests.
+
+Vault does not store the generated master key. Without at least 3 key to
+reconstruct the master key, Vault will remain permanently sealed!
+
+It is possible to generate new unseal keys, provided you have a quorum of
+existing unseal keys shares. See <span class="s2">"vault operator rekey"</span> <span class="k">for </span>more information.
+</pre></table></code></div></div><p>Now run <code class="language-plaintext highlighter-rouge">vault operator unseal $Key</code> and replace <code class="language-plaintext highlighter-rouge">$Key</code> with each of the 5 keys above.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre>vault operator unseal XONSc5Ku8HJu+ix/zbzWhMvDTiPpwWX0W1X/e/J1Xixv
+vault operator unseal J/fQCPvDeMFJT3WprfPy17gwvyPxcvf+GV751fTHUoN/
+vault operator unseal +bRfX5HMISegsODqNZxvNcupQp/kYQuhsQ2XA+GamjY4
+vault operator unseal FMRTPJwzykgXFQOl2XTupw2lfgLOXbbIep9wgi9jQ2ls
+vault operator unseal 7rrxiIVQQWbDTJPMsqrZDKftD6JxJi6vFOlyC0KSabDB
+</pre></table></code></div></div><p>Now grab the token (line 7 in the sample output above), and enter these commands:</p><blockquote><p><strong>Note:</strong> Replace the token below <code class="language-plaintext highlighter-rouge">s.ezlJjFw8ZDZO6KbkAkm605Qv</code> with your own.</p></blockquote><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="nb">export </span><span class="nv">VAULT_TOKEN</span><span class="o">=</span>s.ezlJjFw8ZDZO6KbkAkm605Qv
+vault token create <span class="nt">-ttl</span><span class="o">=</span>10m
+</pre></table></code></div></div><p>Sample output:</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre><td class="rouge-code"><pre>Key                  Value
+<span class="nt">---</span>                  <span class="nt">-----</span>
+token                s.QMhaOED3UGQ4MeH3fmGOpNED
+token_accessor       nApB972Dp2lnTTIF5VXQqnnb
+token_duration       10m
+token_renewable      <span class="nb">true
+</span>token_policies       <span class="o">[</span><span class="s2">"root"</span><span class="o">]</span>
+identity_policies    <span class="o">[]</span>
+policies             <span class="o">[</span><span class="s2">"root"</span><span class="o">]</span>
+</pre></table></code></div></div><p>Now grab the last token (line 3 of the sample output above), and enter this command:</p><blockquote><p><strong>Note:</strong> Replace the token below <code class="language-plaintext highlighter-rouge">s.QMhaOED3UGQ4MeH3fmGOpNED</code> with your own.</p></blockquote><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju run-action <span class="nt">--wait</span> vault/leader authorize-charm <span class="nv">token</span><span class="o">=</span>s.QMhaOED3UGQ4MeH3fmGOpNED
+</pre></table></code></div></div><h3 id="generate-the-certificate-authority-ca">Generate the Certificate Authority (CA)</h3><p>The last step to unseal the vault is to generate a CA using the command below.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju run-action <span class="nt">--wait</span> vault/leader generate-root-ca
+</pre></table></code></div></div><p>At this point the Vault is ready, and you can continue with the charm deployment.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju add-relation mysql-innodb-cluster:certificates vault:certificates
+</pre></table></code></div></div><h2 id="neutron-networking">Neutron networking</h2><p>Create a file called <strong>neutron.yaml</strong> with the YAML below.</p><blockquote><p><strong>Note:</strong> The NIC in this case is called eth1 (line2 below) - but more than likely this will be different for our environment.</p></blockquote><blockquote><p><strong>Tip:</strong> To find out the name of the NIC, go in the MAAS web GUI and click on ‘machines’ at the top. Now click on one of the ‘compute’ nodes and click on ‘Networking’, this will give you a list of the NIC ports and what they are called. There is one NIC that has a green checkmark saying it is used for PXE booting. We need one that says ‘Unconfigured’. If this ‘unconfigured’ NIC is called “eno2”, you would replace “eth1” on the YAML below with “eno2” (Example: <code class="language-plaintext highlighter-rouge">bridge-interface-mappings: br-ex:eno2</code>).</p></blockquote><div class="language-yaml highlighter-rouge"><div class="code-header"> <span text-data=" YAML "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre><td class="rouge-code"><pre><span class="na">ovn-chassis</span><span class="pi">:</span>
+  <span class="na">bridge-interface-mappings</span><span class="pi">:</span> <span class="s">br-ex:eth1</span>
+  <span class="na">ovn-bridge-mappings</span><span class="pi">:</span> <span class="s">physnet1:br-ex</span>
+<span class="na">neutron-api</span><span class="pi">:</span>
+  <span class="na">neutron-security-groups</span><span class="pi">:</span> <span class="no">true</span>
+  <span class="na">flat-network-providers</span><span class="pi">:</span> <span class="s">physnet1</span>
+  <span class="na">worker-multiplier</span><span class="pi">:</span> <span class="m">0.25</span>
+  <span class="na">openstack-origin</span><span class="pi">:</span> <span class="s">cloud:focal-wallaby</span>
+<span class="na">ovn-central</span><span class="pi">:</span>
+  <span class="na">source</span><span class="pi">:</span> <span class="s">cloud:focal-wallaby</span>
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">-n</span> 3 <span class="nt">--to</span> lxd:0,lxd:1,lxd:2 <span class="nt">--config</span> neutron.yaml ovn-central
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">--to</span> lxd:1 <span class="nt">--config</span> neutron.yaml neutron-api
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre>juju deploy neutron-api-plugin-ovn
+juju deploy <span class="nt">--config</span> neutron.yaml ovn-chassis
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre><td class="rouge-code"><pre>juju add-relation neutron-api-plugin-ovn:neutron-plugin neutron-api:neutron-plugin-api-subordinate
+juju add-relation neutron-api-plugin-ovn:ovsdb-cms ovn-central:ovsdb-cms
+juju add-relation ovn-chassis:ovsdb ovn-central:ovsdb
+juju add-relation ovn-chassis:nova-compute nova-compute:neutron-plugin
+juju add-relation neutron-api:certificates vault:certificates
+juju add-relation neutron-api-plugin-ovn:certificates vault:certificates
+juju add-relation ovn-central:certificates vault:certificates
+juju add-relation ovn-chassis:certificates vault:certificates
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>juju deploy mysql-router neutron-api-mysql-router
+juju add-relation neutron-api-mysql-router:db-router mysql-innodb-cluster:db-router
+juju add-relation neutron-api-mysql-router:shared-db neutron-api:shared-db
+</pre></table></code></div></div><h2 id="keystone">Keystone</h2><p>Create a file called <strong>keystone.yaml</strong> with the YAML below.</p><div class="language-yaml highlighter-rouge"><div class="code-header"> <span text-data=" YAML "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="na">keystone</span><span class="pi">:</span>
+  <span class="na">worker-multiplier</span><span class="pi">:</span> <span class="m">0.25</span>
+  <span class="na">openstack-origin</span><span class="pi">:</span> <span class="s">cloud:focal-wallaby</span>
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">--to</span> lxd:0 <span class="nt">--config</span> keystone.yaml keystone
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>juju deploy mysql-router keystone-mysql-router
+juju add-relation keystone-mysql-router:db-router mysql-innodb-cluster:db-router
+juju add-relation keystone-mysql-router:shared-db keystone:shared-db
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre>juju add-relation keystone:identity-service neutron-api:identity-service
+juju add-relation keystone:certificates vault:certificates
+</pre></table></code></div></div><h2 id="rabbitmq">RabbitMQ</h2><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">--to</span> lxd:2 rabbitmq-server
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre>juju add-relation rabbitmq-server:amqp neutron-api:amqp
+juju add-relation rabbitmq-server:amqp nova-compute:amqp
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="o">[</span>SAMPLE JUJU STATUS OUTPUT GOES HERE]
+</pre></table></code></div></div><h2 id="nova-cloud-controller">Nova cloud controller</h2><p>Create a file called <strong>nova-cloud-controller.yaml</strong> with the YAML below.</p><div class="language-yaml highlighter-rouge"><div class="code-header"> <span text-data=" YAML "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="na">nova-cloud-controller</span><span class="pi">:</span>
+  <span class="na">network-manager</span><span class="pi">:</span> <span class="s">Neutron</span>
+  <span class="na">worker-multiplier</span><span class="pi">:</span> <span class="m">0.25</span>
+  <span class="na">openstack-origin</span><span class="pi">:</span> <span class="s">cloud:focal-wallaby</span>
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">--to</span> lxd:3 <span class="nt">--config</span> nova-cloud-controller.yaml nova-cloud-controller
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>juju deploy mysql-router ncc-mysql-router
+juju add-relation ncc-mysql-router:db-router mysql-innodb-cluster:db-router
+juju add-relation ncc-mysql-router:shared-db nova-cloud-controller:shared-db
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre>juju add-relation nova-cloud-controller:identity-service keystone:identity-service
+juju add-relation nova-cloud-controller:amqp rabbitmq-server:amqp
+juju add-relation nova-cloud-controller:neutron-api neutron-api:neutron-api
+juju add-relation nova-cloud-controller:cloud-compute nova-compute:cloud-compute
+juju add-relation nova-cloud-controller:certificates vault:certificates
+</pre></table></code></div></div><h2 id="placement">Placement</h2><p>Create a file called <strong>placement.yaml</strong> with the YAML below.</p><div class="language-yaml highlighter-rouge"><div class="code-header"> <span text-data=" YAML "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="na">placement</span><span class="pi">:</span>
+  <span class="na">worker-multiplier</span><span class="pi">:</span> <span class="m">0.25</span>
+  <span class="na">openstack-origin</span><span class="pi">:</span> <span class="s">cloud:focal-wallaby</span>
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">--to</span> lxd:3 <span class="nt">--config</span> placement.yaml placement
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>juju deploy mysql-router placement-mysql-router
+juju add-relation placement-mysql-router:db-router mysql-innodb-cluster:db-router
+juju add-relation placement-mysql-router:shared-db placement:shared-db
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>juju add-relation placement:identity-service keystone:identity-service
+juju add-relation placement:placement nova-cloud-controller:placement
+juju add-relation placement:certificates vault:certificates
+</pre></table></code></div></div><h2 id="openstack-dashboard">OpenStack dashboard</h2><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">--to</span> lxd:2 <span class="nt">--config</span> openstack-origin<span class="o">=</span>cloud:focal-wallaby openstack-dashboard
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>juju deploy mysql-router dashboard-mysql-router
+juju add-relation dashboard-mysql-router:db-router mysql-innodb-cluster:db-router
+juju add-relation dashboard-mysql-router:shared-db openstack-dashboard:shared-db
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre>juju add-relation openstack-dashboard:identity-service keystone:identity-service
+juju add-relation openstack-dashboard:certificates vault:certificates
+</pre></table></code></div></div><h2 id="glance">Glance</h2><p>Create a file called <strong>glance.yaml</strong> with the YAML below.</p><div class="language-yaml highlighter-rouge"><div class="code-header"> <span text-data=" YAML "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="na">glance</span><span class="pi">:</span>
+  <span class="na">worker-multiplier</span><span class="pi">:</span> <span class="m">0.25</span>
+  <span class="na">openstack-origin</span><span class="pi">:</span> <span class="s">cloud:focal-wallaby</span>
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">--to</span> lxd:3 <span class="nt">--config</span> glance.yaml glance
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>juju deploy mysql-router glance-mysql-router
+juju add-relation glance-mysql-router:db-router mysql-innodb-cluster:db-router
+juju add-relation glance-mysql-router:shared-db glance:shared-db
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre>juju add-relation glance:image-service nova-cloud-controller:image-service
+juju add-relation glance:image-service nova-compute:image-service
+juju add-relation glance:identity-service keystone:identity-service
+juju add-relation glance:certificates vault:certificates
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="o">[</span>SAMPLE JUJU STATUS OUTPUT GOES HERE]
+</pre></table></code></div></div><h2 id="ceph-monitor">Ceph monitor</h2><p>Create a file called <strong>ceph-mon.yaml</strong> with the YAML below.</p><div class="language-yaml highlighter-rouge"><div class="code-header"> <span text-data=" YAML "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="na">ceph-mon</span><span class="pi">:</span>
+  <span class="na">expected-osd-count</span><span class="pi">:</span> <span class="m">3</span>
+  <span class="na">monitor-count</span><span class="pi">:</span> <span class="m">3</span>
+  <span class="na">source</span><span class="pi">:</span> <span class="s">cloud:focal-wallaby</span>
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">-n</span> 3 <span class="nt">--to</span> lxd:0,lxd:1,lxd:2 <span class="nt">--config</span> ceph-mon.yaml ceph-mon
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>juju add-relation ceph-mon:osd ceph-osd:mon
+juju add-relation ceph-mon:client nova-compute:ceph
+juju add-relation ceph-mon:client glance:ceph
+</pre></table></code></div></div><h2 id="cinder">Cinder</h2><p>Create a file called <strong>cinder.yaml</strong> with the YAML below.</p><div class="language-yaml highlighter-rouge"><div class="code-header"> <span text-data=" YAML "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre><span class="na">cinder</span><span class="pi">:</span>
+  <span class="na">block-device</span><span class="pi">:</span> <span class="s">None</span>
+  <span class="na">glance-api-version</span><span class="pi">:</span> <span class="m">2</span>
+  <span class="na">worker-multiplier</span><span class="pi">:</span> <span class="m">0.25</span>
+  <span class="na">openstack-origin</span><span class="pi">:</span> <span class="s">cloud:focal-wallaby</span>
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">--to</span> lxd:1 <span class="nt">--config</span> cinder.yaml cinder
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>juju deploy mysql-router cinder-mysql-router
+juju add-relation cinder-mysql-router:db-router mysql-innodb-cluster:db-router
+juju add-relation cinder-mysql-router:shared-db cinder:shared-db
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre>juju add-relation cinder:cinder-volume-service nova-cloud-controller:cinder-volume-service
+juju add-relation cinder:identity-service keystone:identity-service
+juju add-relation cinder:amqp rabbitmq-server:amqp
+juju add-relation cinder:image-service glance:image-service
+juju add-relation cinder:certificates vault:certificates
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy cinder-ceph
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>juju add-relation cinder-ceph:storage-backend cinder:storage-backend
+juju add-relation cinder-ceph:ceph ceph-mon:client
+juju add-relation cinder-ceph:ceph-access nova-compute:ceph-access
+</pre></table></code></div></div><h2 id="ceph-rados-gateway">Ceph RADOS Gateway</h2><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy <span class="nt">--to</span> lxd:0 <span class="nt">--config</span> <span class="nb">source</span><span class="o">=</span>cloud:focal-wallaby ceph-radosgw
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju add-relation ceph-radosgw:mon ceph-mon:radosgw
+</pre></table></code></div></div><h2 id="ntp">NTP</h2><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju deploy ntp
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju add-relation ceph-osd:juju-info ntp:juju-info
+</pre></table></code></div></div><h2 id="final-results-and-dashboard-access">Final results and dashboard access</h2><p>Once the <code class="language-plaintext highlighter-rouge">juju status</code> output has settled it should look something like this:</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="o">[</span>SAMPLE JUJU STATUS OUTPUT GOES HERE]
+</pre></table></code></div></div><p>At this point you should have a fully deployed OpenStack. To retrieve the OpenStack Dashboard IP enter the following command:</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju status <span class="nt">--format</span><span class="o">=</span>yaml openstack-dashboard | <span class="nb">grep </span>public-address | <span class="nb">awk</span> <span class="s1">'{print $2}'</span> | <span class="nb">head</span> <span class="nt">-1</span>
+</pre></table></code></div></div><p>And to retrieve the password use:</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju run <span class="nt">--unit</span> keystone/leader leader-get admin_passwd
+</pre></table></code></div></div><h3 id="make-accessing-the-openstack-dashboard-easier">Make Accessing the Openstack Dashboard easier</h3><p>It is sometimes helpful to have aliases for commonly used commands.</p><p>To create an alias that outputs the URL and password of the OpenStack Dashbaord, use your favorite text editor to edit the <code class="language-plaintext highlighter-rouge">.bashrc</code> file.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>vim ~/.bashrc
+</pre></table></code></div></div><p>With the <code class="language-plaintext highlighter-rouge">.bashrc</code> file open, scroll down to where you see aliases listed. Here enter the following aliases in new lines:</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="nb">alias </span>openstack-ip<span class="o">=</span><span class="s1">'juju status --format=yaml openstack-dashboard | grep public-address | awk '</span><span class="s2">"'"</span><span class="s1">'{print $2}'</span><span class="s2">"'"</span><span class="s1">' | head -1'</span>
+<span class="nb">alias </span>openstack-pass<span class="o">=</span><span class="s1">'juju run --unit keystone/leader leader-get admin_passwd'</span>
+<span class="nb">alias </span>openstack-login<span class="o">=</span><span class="s1">'openstackip=$(openstack-ip) &amp;&amp; echo "Dashboard URL: https://"$openstackip"/horizon" &amp;&amp; echo "Username: admin" &amp;&amp; openstackpass=$(openstack-pass) &amp;&amp; echo "Passowrd: "$openstackpass &amp;&amp; echo "Domain: admin_domain"'</span>
+</pre></table></code></div></div><p>Now save your edits, and exit the file. To make the new changes effective source the <code class="language-plaintext highlighter-rouge">.bashrc</code> file.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="nb">source</span> ~/.bashrc
+</pre></table></code></div></div><p>If you followed the steps correctly the command <code class="language-plaintext highlighter-rouge">openstack-login</code> should output your Dashboard URL, username, password, and domain.</p><h2 id="vm-consoles">VM consoles</h2><div class="language-bash highlighter-rouge"><div class="code-header"> <span text-data=" Shell "><i class="fa-fw fas fa-code small"></i></span> <button aria-label="copy" title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>juju config nova-cloud-controller console-access-protocol<span class="o">=</span>novnc
+</pre></table></code></div></div><h1 id="next-section-configuration"><a href="https://bsu-cybersecurity.github.io/posts/openstack-deployment-configuration/">Next Section: Configuration</a></h1></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/training-soc/'>Training-SOC</a>, <a href='/categories/openstack/'>OpenStack</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/openstack/" class="post-tag no-text-decoration" >openstack</a> <a href="/tags/cloud/" class="post-tag no-text-decoration" >cloud</a> <a href="/tags/deployment/" class="post-tag no-text-decoration" >deployment</a> <a href="/tags/soc/" class="post-tag no-text-decoration" >soc</a> <a href="/tags/guide/" class="post-tag no-text-decoration" >guide</a> <a href="/tags/charms/" class="post-tag no-text-decoration" >charms</a> <a href="/tags/juju/" class="post-tag no-text-decoration" >juju</a> <a href="/tags/maas/" class="post-tag no-text-decoration" >maas</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=OpenStack Deployment - Charms - Teo's Docs&url=/posts/openstack-deployment-charms/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=OpenStack Deployment - Charms - Teo's Docs&u=/posts/openstack-deployment-charms/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://telegram.me/share?text=OpenStack Deployment - Charms - Teo's Docs&url=/posts/openstack-deployment-charms/" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" title-succeed="Link copied successfully!"> </i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted topbar-down"><div class="access"><div id="access-tags"> <span>Trending Tags</span><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/cloud/">cloud</a> <a class="post-tag" href="/tags/deployment/">deployment</a> <a class="post-tag" href="/tags/guide/">guide</a> <a class="post-tag" href="/tags/openstack/">openstack</a> <a class="post-tag" href="/tags/soc/">soc</a> <a class="post-tag" href="/tags/juju/">juju</a> <a class="post-tag" href="/tags/maas/">maas</a> <a class="post-tag" href="/tags/charms/">charms</a> <a class="post-tag" href="/tags/image/">image</a> <a class="post-tag" href="/tags/instance/">instance</a></div></div></div><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5"> <span class="pl-3 pt-2 mb-2">Contents</span><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="post-extend-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/openstack-deployment-debugging/"><div class="card-body"> <span class="timeago small" >Jan 22, 2021<i class="unloaded">2021-01-22T07:00:00-07:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>OpenStack Deployment - Debugging</h3><div class="text-muted small"><p></p></div></div></a></div><div class="card"> <a href="/posts/openstack-deployment-management/"><div class="card-body"> <span class="timeago small" >Jan 23, 2021<i class="unloaded">2021-01-23T07:00:00-07:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>OpenStack Deployment - Management</h3><div class="text-muted small"><p> Next Section: Debugging</p></div></div></a></div><div class="card"> <a href="/posts/openstack-deployment-configuration/"><div class="card-body"> <span class="timeago small" >Jan 24, 2021<i class="unloaded">2021-01-24T07:00:00-07:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>OpenStack Deployment - Configuration</h3><div class="text-muted small"><p> Next Section: Management</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/posts/openstack-deployment-configuration/" class="btn btn-outline-primary" prompt="Older"><p>OpenStack Deployment - Configuration</p></a> <a href="/posts/openstack-deployment-juju/" class="btn btn-outline-primary" prompt="Newer"><p>OpenStack Deployment - JuJu</p></a></div><div id="disqus_thread" class="pt-2 pb-2"><p class="text-center text-muted small"> Comments powered by <a href="https://disqus.com/">Disqus</a>.</p></div><script type="text/javascript"> var disqus_config = function () { this.page.url = '/posts/openstack-deployment-charms/'; this.page.identifier = '/posts/openstack-deployment-charms/'; }; /* Lazy loading */ var disqus_observer = new IntersectionObserver(function (entries) { if(entries[0].isIntersecting) { (function () { var d = document, s = d.createElement('script'); s.src = 'https://teosdocs.disqus.com.disqus.com/embed.js'; s.setAttribute('data-timestamp', +new Date()); (d.head || d.body).appendChild(s); })(); disqus_observer.disconnect(); } }, { threshold: [0] }); disqus_observer.observe(document.querySelector('#disqus_thread')); /* Auto switch theme */ function reloadDisqus() { /* Disqus hasn't been loaded */ if (typeof DISQUS === "undefined") { return; } if (document.readyState == 'complete') { DISQUS.reset({ reload: true, config: disqus_config }); } } const modeToggle = document.querySelector(".mode-toggle"); if (modeToggle !== null) { modeToggle.addEventListener('click', reloadDisqus); window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', reloadDisqus); } </script></div></div></div><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center"><div class="footer-left"><p class="mb-0"> © 2022 <a href="https://github.com/blacksheep-git">Mateo Ortegon</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><h4 class="text-muted mb-4">Trending Tags</h4><a class="post-tag" href="/tags/cloud/">cloud</a> <a class="post-tag" href="/tags/deployment/">deployment</a> <a class="post-tag" href="/tags/guide/">guide</a> <a class="post-tag" href="/tags/openstack/">openstack</a> <a class="post-tag" href="/tags/soc/">soc</a> <a class="post-tag" href="/tags/juju/">juju</a> <a class="post-tag" href="/tags/maas/">maas</a> <a class="post-tag" href="/tags/charms/">charms</a> <a class="post-tag" href="/tags/image/">image</a> <a class="post-tag" href="/tags/instance/">instance</a></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/lozad/dist/lozad.min.js,npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/popper.js@1.16.1,npm/bootstrap@4/dist/js/bootstrap.min.js"></script> <script defer src="/app.js"></script> <script defer src="https://www.googletagmanager.com/gtag/js?id="></script> <script> document.addEventListener("DOMContentLoaded", function(event) { window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', ''); }); </script>
